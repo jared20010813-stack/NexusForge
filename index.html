@@ -1,176 +1,234 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusForge — Elite Academic Intelligence Platform</title>
-    <meta name="description" content="Advanced secure study & research platform with built-in proxy for games and learning.">
-    <meta name="keywords" content="NexusForge, study, proxy, unblocked games, academic platform">
-    
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="logo.png">
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { margin:0; font-family:'Inter',sans-serif; background:#0a0f1c; color:#e2e8f0; overflow:hidden; height:100vh; display:flex; flex-direction:column; }
-        header { background:#111827; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1e2937; }
-        .logo { font-size:1.6rem; font-weight:700; color:#60a5fa; cursor:pointer; }
-        .main { flex:1; display:flex; }
-        .sidebar { width:260px; background:#111827; padding:20px; overflow-y:auto; border-right:1px solid #1e2937; }
-        .content { flex:1; display:flex; flex-direction:column; }
-        iframe { flex:1; border:none; background:#fff; }
-        .nav-item { padding:14px 16px; margin:6px 0; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:14px; transition:0.2s; }
-        .nav-item:hover { background:#1e2937; color:#60a5fa; }
-        .tab-bar { background:#111827; padding:8px 16px; display:flex; gap:8px; overflow-x:auto; border-bottom:1px solid #1e2937; }
-        .tab { padding:8px 18px; background:#1e2937; border-radius:9999px; white-space:nowrap; cursor:pointer; display:flex; align-items:center; gap:8px; }
-        .tab.active { background:#60a5fa; color:#0a0f1c; }
-        svg { width:28px; height:28px; transition:0.3s; }
-        .nav-item:hover svg { transform:scale(1.2) rotate(8deg); }
-    </style>
+  <meta charset="UTF-8">
+  <title>NexusForge</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family:system-ui,sans-serif;
+      background:#0a0f1c;
+      color:#e2e8f0;
+      display:flex;
+      flex-direction:column;
+      height:100vh;
+      overflow:hidden;
+    }
+
+    header{
+      background:#111827;
+      padding:14px 24px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+      border-bottom:1px solid #1e2937;
+    }
+
+    .logo{
+      font-size:1.4rem;
+      font-weight:700;
+      color:#60a5fa;
+      cursor:pointer;
+    }
+
+    input{
+      flex:1;
+      padding:12px;
+      border-radius:9999px;
+      border:none;
+      background:#1e2937;
+      color:white;
+    }
+
+    button{
+      padding:10px 18px;
+      background:#60a5fa;
+      border:none;
+      border-radius:9999px;
+      cursor:pointer;
+    }
+
+    .main{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .tab-bar{
+      display:flex;
+      gap:8px;
+      padding:8px 16px;
+      background:#111827;
+      border-bottom:1px solid #1e2937;
+      overflow-x:auto;
+    }
+
+    .tab{
+      padding:8px 14px;
+      background:#1e2937;
+      border-radius:9999px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+
+    .tab.active{
+      background:#60a5fa;
+      color:#0a0f1c;
+    }
+
+    iframe{
+      flex:1;
+      border:none;
+      background:white;
+    }
+  </style>
 </head>
+
 <body>
-    <header>
-        <div class="logo" onclick="panic()">NexusForge</div>
-        <input id="urlInput" placeholder="Enter URL or game (e.g. 1v1.lol)" 
-               style="flex:1;max-width:520px;margin:0 20px;padding:12px;border-radius:9999px;border:none;background:#1e2937;color:white;" 
-               onkeypress="if(event.key==='Enter') goUrl()">
-        <button onclick="goUrl()" style="padding:10px 24px;background:#60a5fa;color:#0a0f1c;border:none;border-radius:9999px;cursor:pointer;">Go Secure</button>
-    </header>
 
-    <div class="main">
-        <div class="sidebar">
-            <h3 style="color:#64748b;margin-top:0;">Quick Access</h3>
-            
-            <div class="nav-item" onclick="addTab('https://google.com')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-                Research Hub
-            </div>
-            
-            <div class="nav-item" onclick="addTab('https://youtube.com')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8z"/><path d="M10 9l5 3-5 3V9z"/></svg>
-                Video Lessons
-            </div>
-            
-            <!-- Games (all open inside iframe) -->
-            <div class="nav-item" onclick="addTab('https://1v1.lol')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M14 3v18M5 7h14M5 17h14"/></svg>
-                1v1.LOL
-            </div>
-            <div class="nav-item" onclick="addTab('https://slope-game.io')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
-                Slope
-            </div>
-            <div class="nav-item" onclick="addTab('https://basketball-legends.io')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 9l5 3-5 3V9z"/></svg>
-                Basketball Legends
-            </div>
-            <div class="nav-item" onclick="addTab('https://krunker.io')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-                Krunker.io
-            </div>
-            <div class="nav-item" onclick="addTab('https://www.coolmathgames.com')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-                Coolmath Games
-            </div>
-            
-            <hr style="border-color:#1e2937;margin:20px 0;">
-            <div onclick="customize()" style="cursor:pointer;padding:12px;background:#1e2937;border-radius:8px;text-align:center;">⚙️ Customize Title</div>
-            <p style="margin-top:30px;font-size:0.85rem;color:#64748b;"><strong>Panic Key:</strong> Esc ×2</p>
-        </div>
+<header>
+  <div class="logo" onclick="location.reload()">NexusForge</div>
 
-        <div class="content">
-            <div class="tab-bar" id="tabBar"></div>
-            <iframe id="mainFrame" src="https://www.google.com" allowfullscreen></iframe>
-        </div>
-    </div>
+  <input id="urlInput" placeholder="Enter URL"
+    onkeypress="if(event.key==='Enter')addTab(document.getElementById('urlInput').value)">
 
-    <script>
-        // Service Worker Registration (critical for proxy)
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(reg => {
-                console.log('%c✅ Scramjet Proxy Ready', 'color:#60a5fa;font-weight:bold');
-            }).catch(err => console.log('SW Error:', err));
-        }
+  <button onclick="addTab(document.getElementById('urlInput').value)">
+    Go
+  </button>
+</header>
 
-        let tabs = [], current = 0;
+<div class="main">
+  <div class="tab-bar" id="tabBar"></div>
+  <iframe id="mainFrame"></iframe>
+</div>
 
-        function renderTabs() {
-            const container = document.getElementById('tabBar');
-            container.innerHTML = '';
-            tabs.forEach((tab, i) => {
-                const el = document.createElement('div');
-                el.className = `tab ${i === current ? 'active' : ''}`;
-                el.innerHTML = `${tab.title} <span onclick="event.stopImmediatePropagation(); closeTab(${i});" style="margin-left:10px;color:#999;">×</span>`;
-                el.onclick = () => switchTab(i);
-                container.appendChild(el);
-            });
-        }
+<!-- ================= FIREBASE + APP LOGIC ================= -->
+<script type="module">
 
-        function addTab(url) {
-            if (!url.startsWith('http')) url = 'https://' + url;
-            const title = new URL(url).hostname.replace('www.', '');
-            tabs.push({url, title});
-            renderTabs();
-            switchTab(tabs.length - 1);
-        }
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        function switchTab(i) {
-            current = i;
-            document.getElementById('mainFrame').src = tabs[i].url;
-            renderTabs();
-        }
+// 🔥 Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDUeTtZ09-PiNHg3UlKGMNtMqBGTrxGo",
+  authDomain: "nexus-4cfe5.firebaseapp.com",
+  projectId: "nexus-4cfe5",
+  storageBucket: "nexus-4cfe5.firebasestorage.app",
+  messagingSenderId: "96048174084",
+  appId: "1:96048174084:web:4b90ac6a5f73f914a65151",
+  measurementId: "G-E82XDN839Q"
+};
 
-        function closeTab(i) {
-            if (tabs.length <= 1) return;
-            tabs.splice(i, 1);
-            if (current >= tabs.length) current = tabs.length - 1;
-            renderTabs();
-            switchTab(current);
-        }
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-        function goUrl() {
-            let val = document.getElementById('urlInput').value.trim();
-            if (!val) return;
-            addTab(val);
-        }
+// ================= STATE =================
+let tabs = [];
+let current = 0;
 
-        // Prevent any link from opening outside
-        document.addEventListener('click', e => {
-            if (e.target.tagName === 'A' && (e.target.target === '_blank' || e.target.href)) {
-                e.preventDefault();
-                addTab(e.target.href || e.target.getAttribute('href'));
-            }
-        }, true);
+// ================= CLOUD SAVE =================
+async function saveTabsCloud(){
+  await setDoc(doc(db, "nexus", "tabs"), {
+    tabs,
+    current
+  });
+}
 
-        // Panic Key
-        let escCount = 0;
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') {
-                escCount++;
-                if (escCount >= 2) {
-                    document.body.style.display = 'none';
-                    setTimeout(() => {
-                        if (confirm('Return to NexusForge?')) document.body.style.display = 'flex';
-                    }, 600);
-                    escCount = 0;
-                }
-            }
-        });
+// ================= CLOUD LOAD =================
+async function loadTabsCloud(){
+  const snap = await getDoc(doc(db, "nexus", "tabs"));
 
-        window.customize = () => {
-            const newTitle = prompt('New platform name?', document.title);
-            if (newTitle) document.title = newTitle;
-        };
+  if(snap.exists()){
+    const data = snap.data();
+    tabs = data.tabs || [];
+    current = data.current || 0;
+  } else {
+    tabs = [{ url:"https://google.com", title:"google.com" }];
+    current = 0;
+  }
 
-        window.panic = () => {
-            document.body.style.display = 'none';
-            setTimeout(() => document.body.style.display = 'flex', 1500);
-        };
+  renderTabs();
+  loadCurrent();
+}
 
-        // Start
-        window.onload = () => {
-            addTab('https://google.com');
-        };
-    </script>
+// ================= TABS =================
+function addTab(url){
+  try{
+    if(!url.startsWith("http")) url = "https://" + url;
+    const u = new URL(url);
+
+    tabs.push({
+      url: u.href,
+      title: u.hostname.replace("www.","")
+    });
+
+    current = tabs.length - 1;
+
+    saveTabsCloud();
+    renderTabs();
+    loadCurrent();
+  } catch {
+    alert("Invalid URL");
+  }
+}
+
+function switchTab(i){
+  current = i;
+  saveTabsCloud();
+  loadCurrent();
+  renderTabs();
+}
+
+function closeTab(i){
+  if(tabs.length <= 1) return;
+
+  tabs.splice(i,1);
+  if(current >= tabs.length) current = tabs.length - 1;
+
+  saveTabsCloud();
+  renderTabs();
+  loadCurrent();
+}
+
+// ================= RENDER =================
+function renderTabs(){
+  const bar = document.getElementById("tabBar");
+  bar.innerHTML = "";
+
+  tabs.forEach((t,i)=>{
+    const el = document.createElement("div");
+    el.className = `tab ${i===current ? "active":""}`;
+
+    el.innerHTML = `
+      ${t.title}
+      <span onclick="event.stopPropagation();window.closeTab(${i})" style="color:#999;margin-left:8px;">×</span>
+    `;
+
+    el.onclick = ()=> window.switchTab(i);
+    bar.appendChild(el);
+  });
+}
+
+function loadCurrent(){
+  const frame = document.getElementById("mainFrame");
+  if(!tabs.length) return;
+
+  frame.src = tabs[current].url;
+}
+
+// ================= EXPORT FUNCTIONS =================
+window.addTab = addTab;
+window.switchTab = switchTab;
+window.closeTab = closeTab;
+
+// ================= INIT =================
+window.onload = loadTabsCloud;
+
+</script>
+
 </body>
 </html>
